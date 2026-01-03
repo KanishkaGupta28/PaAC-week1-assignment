@@ -1,4 +1,4 @@
-# PAAC Week 1 Assignment – Quantum State Tomography
+# PaAC Week 1 Assignment – Quantum State Tomography
 
 This repository contains the PAAC Week 1 assignment implementing single-qubit quantum state tomography
 using Pauli measurements.
