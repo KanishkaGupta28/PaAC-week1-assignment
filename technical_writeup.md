@@ -68,7 +68,7 @@ $$
 | Informational completeness | Yes | Yes |
 | Measurement efficiency | High (minimal redundancy) | Lower |
 | Experimental simplicity | Complex | Simple |
-| Used in this project | ❌ | ✅ |
+
 
 SIC-POVMs are often favored in theoretical studies due to their efficiency,
 while Pauli measurements are easier to implement and interpret, making them
