@@ -1,0 +1,32 @@
+[
+    {
+        "State": "|0>",
+        "Fidelity": 1.0,
+        "Trace Distance": 0.022203603311174516,
+        "Bloch Error": 0.04440720662234903
+    },
+    {
+        "State": "|1>",
+        "Fidelity": 1.0,
+        "Trace Distance": 0.02024845673131659,
+        "Bloch Error": 0.04049691346263317
+    },
+    {
+        "State": "|+>",
+        "Fidelity": 1.0,
+        "Trace Distance": 0.019416487838947602,
+        "Bloch Error": 0.03883297567789521
+    },
+    {
+        "State": "|->",
+        "Fidelity": 1.0,
+        "Trace Distance": 0.03671511950137164,
+        "Bloch Error": 0.07343023900274329
+    },
+    {
+        "State": "(|0>+i|1>)/\u221a2",
+        "Fidelity": 0.0,
+        "Trace Distance": 1.000476386527938,
+        "Bloch Error": 2.000952773055876
+    }
+]

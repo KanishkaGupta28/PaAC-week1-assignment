@@ -1,0 +1,9 @@
+{
+    "expectation_values": {
+        "X": 1.0,
+        "Y": -0.032,
+        "Z": -0.022
+    },
+    "fidelity": 1.0,
+    "trace_distance": 0.019416487838947602
+}
