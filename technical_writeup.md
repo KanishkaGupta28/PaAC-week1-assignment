@@ -1,104 +1,85 @@
-# Measurement Theory Notes
+# Quantum State Tomography – Technical Report
 
-## Born Rule
+## Overview
+This project implements **single-qubit quantum state tomography** using measurement data obtained in the **Pauli basis**. The primary goal is to simulate measurement outcomes, reconstruct the corresponding quantum state (density matrix), and validate the results.  
 
-In quantum mechanics, the **Born rule** provides the link between the mathematical
-description of a quantum state and the probabilities of measurement outcomes.
+The reconstruction process demonstrates how experimentally accessible measurements can be used to infer the underlying quantum state—an essential step in quantum computing calibration and verification.
 
-For a quantum state described by a density matrix $\rho$ and a measurement
-operator $E_i$, the probability of obtaining outcome $i$ is given by:
+## Dataset Generation
+Synthetic measurement datasets are generated for known **reference states**:
 
-$$
-p(i) = \mathrm{Tr}(\rho E_i)
-$$
+- $|0\rangle$ — ground state  
+- $|1\rangle$ — excited state  
+- $|+\rangle = (|0\rangle + |1\rangle)/\sqrt{2}$ — superposition along X  
+- $|-\rangle = (|0\rangle - |1\rangle)/\sqrt{2}$ — superposition along -X  
 
-where:  
-- $\rho$ is the density matrix representing the quantum state  
-- $E_i$ is the positive operator corresponding to measurement outcome $i$  
-- $\mathrm{Tr}(\cdot)$ denotes the trace operation  
+For each reference state, simulated measurement results are obtained in the **Pauli X, Y, and Z** bases. These are stored as **NumPy arrays** alongside metadata containing information about:
 
-This rule forms the statistical foundation of quantum measurement theory.
+- The prepared state vector  
+- The measurement basis  
+- The number of shots or samples per basis  
 
----
+This structured dataset provides reproducible input for tomography analysis.
 
-## Pauli Measurement Operators
+## Measurement and Reconstruction
+Quantum state tomography is performed using the expectation values of the Pauli operators.  
+The **expectation values** $\langle X \rangle, \langle Y \rangle, \langle Z \rangle$ are estimated directly from simulated measurement frequencies.
 
-For **single-qubit quantum state tomography**, measurements are performed in the
-Pauli bases $X$, $Y$, and $Z$. The Pauli matrices are defined as:
-
-$$
-X =
-\begin{pmatrix}
-0 & 1 \\
-1 & 0
-\end{pmatrix}, \quad
-Y =
-\begin{pmatrix}
-0 & -i \\
-i & 0
-\end{pmatrix}, \quad
-Z =
-\begin{pmatrix}
-1 & 0 \\
-0 & -1
-\end{pmatrix}
-$$
-
-Measurements in these bases are sufficient for reconstructing any single-qubit
-density matrix because the Pauli operators form a complete basis for the space
-of $2 \times 2$ Hermitian operators.
-
----
-
-## SIC-POVM vs. Pauli Measurements
-
-A **SIC-POVM (Symmetric Informationally Complete Positive Operator-Valued Measure)**
-consists of four measurement operators that are symmetrically distributed on the
-Bloch sphere. These operators satisfy the condition:
+The **density matrix reconstruction** for a single qubit is carried out using the **linear inversion method**:
 
 $$
-\mathrm{Tr}(E_i E_j) = \frac{1}{3}, \quad i \neq j
+\rho = \frac{1}{2}\Big(I + \langle X \rangle X + \langle Y \rangle Y + \langle Z \rangle Z \Big)
 $$
 
-### Comparison
+where $I$ is the identity operator and $X, Y, Z$ are the Pauli matrices.  
+This method assumes ideal, noise-free measurements and full knowledge of the measurement statistics.
 
-| Property | SIC-POVM | Pauli Measurements |
-|--------|----------|-------------------|
-| Number of outcomes | 4 | 3 measurement bases |
-| Informational completeness | Yes | Yes |
-| Measurement efficiency | High (minimal redundancy) | Lower |
-| Experimental simplicity | Complex | Simple |
-
-
-SIC-POVMs are often favored in theoretical studies due to their efficiency,
-while Pauli measurements are easier to implement and interpret, making them
-suitable for this project.
-
----
-
-## Operator Definitions
-
-- **Measurement operator $E_i$:** A positive semi-definite operator
-  associated with a measurement outcome  
-- **POVM:** A set of operators $\{E_i\}$ satisfying
-  $\sum_i E_i = I$, where $I$ is the identity operator  
-- **Projective measurement:** A special case of POVM where each operator is an
-  orthogonal projector satisfying $E_i^2 = E_i$
-
----
-
-## Validation Checks
-
-After reconstructing a density matrix $\rho$, the following physical
-consistency checks are applied:
+## Validation Results
+The reconstructed density matrices are validated against three primary physical constraints:
 
 - **Hermiticity:** $\rho = \rho^\dagger$  
-  Ensures observable quantities are real-valued  
 - **Trace normalization:** $\mathrm{Tr}(\rho) = 1$  
-  Ensures total probability is conserved  
 - **Positivity:** All eigenvalues of $\rho \ge 0$  
-  Confirms the state is physically realizable  
 
-If all conditions are satisfied, the reconstructed density matrix represents a
-valid quantum state.
+Validation confirms that the reconstructed states are **physically consistent** and closely match the expected analytical density matrices for the test states.  
+Quantitative comparisons (e.g., fidelity scores) indicate near-unity overlap for synthetic, noiseless data.
+
+## Visualizations
+Visual inspection is performed using **3D Bloch sphere plots** and **density matrix visualizations**.  
+Interactive **HTML plots** are generated to represent:
+
+- Real and imaginary parts of reconstructed matrices  
+- Bloch vector representation of each state  
+
+These visualizations provide intuitive insight into state reconstruction accuracy and any potential reconstruction bias.
+
+## Limitations
+While the current implementation accurately reconstructs single-qubit states under ideal conditions, several limitations remain:
+
+- The approach assumes **perfect measurement statistics** without noise.  
+- Only **single-qubit tomography** is supported (no multi-qubit extension yet).  
+- Does not incorporate **maximum likelihood estimation (MLE)** for physically constrained reconstruction under experimental noise.  
+
+Future improvements could include:
+
+- Extending the framework to multi-qubit systems.  
+- Incorporating noise modeling and MLE reconstruction.  
+- Automating fidelity analysis and confidence estimation.
+
+## Summary
+This project successfully demonstrates single-qubit quantum state tomography through simulated measurement data. The workflow integrates dataset generation, reconstruction using Pauli expectations, and automated validation. The results confirm the theoretical predictions, establishing a foundation for extending these methods to experimental and multi-qubit systems.
+
+---
+
+# Reflection
+
+## Tools Used
+Python, NumPy, Matplotlib, Jupyter Notebook, and Qiskit were used for simulation and analysis.
+
+## Open Questions
+- How do measurement noise and finite sampling affect reconstruction accuracy?  
+- How does SIC-POVM tomography compare quantitatively with Pauli-based tomography?  
+
+## Planned Improvements
+Future work includes extending the framework to multi-qubit states, implementing SIC-POVM measurements, and adding noise models.
 
